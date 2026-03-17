@@ -13,8 +13,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup vcpkg
+        uses: lukka/run-vcpkg@v11
+
+      - name: Install dependencies
+        run: vcpkg install curl:x64-windows
+
       - name: Configure CMake
-        run: cmake -B build -S . -A x64
+        run: cmake -B build -S . -A x64 -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT\scripts\buildsystems\vcpkg.cmake"
 
       - name: Build
         run: cmake --build build --config Release
